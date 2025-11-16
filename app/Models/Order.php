@@ -30,7 +30,7 @@ class Order extends Model
 
     public function addresses() 
     {
-        return $this->hasMany(\App\Models\Address::class);
+        return $this->hasMany(Addres::class);
     }
 
 }

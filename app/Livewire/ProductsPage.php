@@ -36,15 +36,19 @@ class ProductsPage extends Component
     #[Url]
     public $sort = 'latest';
 
-    public function addToCart($product_id) {
-        $total_count = CartManagement::classddItemToCart($product_id);
+    public function addToCart($product_id)
+    {
+        $total_count = CartManagement::addItemToCart($product_id);
 
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        // emit an event for other Livewire components
+        $this->emit('update-cart-count', $total_count);
 
-        LivewireAlert::title('Item Saved')
-            ->text('The item has been successfully saved to the database.')
-            ->success()
-            ->show();
+        // dispatch a browser event for showing a success alert
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Item Saved',
+            'text' => 'The item has been successfully saved to the database.',
+            'icon' => 'success',
+        ]);
     }
 
     public function render()
@@ -79,7 +83,7 @@ class ProductsPage extends Component
             $productQuery->orderBy('price');
         }
 
-        return view('livewire.product-page', [
+        return view('livewire.products-page', [
             'products' => $productQuery->paginate(6),
             'categories' => Category::where('is_active', 1)->get(['id', 'name', 'slug']),
             'brands' => Brand::where('is_active', 1)->get(['id', 'name', 'slug']),

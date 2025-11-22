@@ -17,6 +17,8 @@ use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ForgotPage;
 use App\Livewire\Auth\ResetPasswordPage;
+use App\Livewire\ProductsPage;
 
 Route::get('/', HomePage::class)->name('home');
 Route::get('/categories', CategoriesPage::class)->name('categories');
+Route::get('/products', ProductsPage::class);

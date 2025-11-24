@@ -18,6 +18,10 @@
                                         </label>
                                     </li>
 
+                                    @foreach ($products as $)
+                                    
+                                    @endforeach
+
                                 @endforeach
 
                             </ul>

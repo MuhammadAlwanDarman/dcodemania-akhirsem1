@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Livewire\HomePage;
 use App\Livewire\CategoriesPage;
-use App\Livewire\ProductPage;
+
 use App\Livewire\ProductDetailPage;
 use App\Livewire\CartPage;
 use App\Livewire\CheckOutPage;
@@ -24,7 +24,7 @@ Route::get('/', HomePage::class)->name('home');
 Route::get('/categories', CategoriesPage::class);
 Route::get('/products', ProductsPage::class);
 Route::get('/cart', CartPage::class);
-Route::get('/products/{product}',ProductsPage::class)->name('product.detail');
+Route::get('/products/{slug}',ProductDetailPage::class);
 
 Route::get('/checkout', CheckOutPage::class);
 Route::get('/my-order', MyOrderPage::class);

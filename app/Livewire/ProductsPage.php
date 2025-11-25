@@ -17,6 +17,7 @@ use Jantinnerezo\LivewireAlert\Facades\LivewireAlert;
 class ProductsPage extends Component
 {
     use WithPagination;
+    
 
     #[Url]
     public $selected_categories = [];
@@ -41,7 +42,7 @@ class ProductsPage extends Component
         $total_count = CartManagement::addItemToCart($product_id);
 
         // emit an event for other Livewire components
-        $this->emit('update-cart-count', $total_count);
+        
 
         // dispatch a browser event for showing a success alert
         $this->dispatchBrowserEvent('swal', [

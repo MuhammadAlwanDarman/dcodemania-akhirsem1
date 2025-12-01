@@ -2,44 +2,59 @@
 
 namespace App\Livewire;
 
-use App\Helper\CartManagement;
-use App\Livewire\Partials\Navbar;
-use App\Models\Product;
-use Livewire\Attributes\Title;
 use Livewire\Component;
+use App\Helper\CartManagement;
+use App\Models\Product;
 
-#[Title ('Poduct Page - DCodeMania')]
 class ProductDetailPage extends Component
 {
-    public $slug;
+    public $product;
     public $quantity = 1;
+    public $total_price = 0;
 
-    public function mount($slug) {
-        $this->slug = $slug;
+    public function mount($productId)
+    {
+        $this->product = Product::with('images')->findOrFail($productId);
+        $this->calculateTotal();
     }
 
     public function increaseQty()
     {
         $this->quantity++;
+        $this->calculateTotal();
     }
 
     public function decreaseQty()
     {
-        if($this->quantity > 1 ) {
-            $this->quantity--; 
+        if ($this->quantity > 1) {
+            $this->quantity--;
+            $this->calculateTotal();
         }
     }
 
-    public function addToCart($product_id) {
-        $total_count = CartManagement::addItemToCart($product_id);
+    public function calculateTotal()
+    {
+        $this->total_price = $this->product->price * $this->quantity;
+    }
 
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+    public function addToCart($product_id)
+    {
+        // Tambahkan produk ke cart dengan quantity yang dipilih
+        $total_count = CartManagement::addItemToCartWithQty($product_id, $this->quantity);
+        
+        // Dispatch event untuk update cart count di navbar
+        $this->dispatch('update-cart-count', total_count: $total_count);
+        
+        // Reset quantity ke 1 setelah berhasil add to cart
+        $this->quantity = 1;
+        $this->calculateTotal();
+        
+        // Show success message
+        session()->flash('success', 'Product added to cart successfully!');
     }
 
     public function render()
     {
-        return view('livewire.product-detail-page', [
-            'product' => Product::where('slug', $this->slug)->firstOrFail()
-        ]);
+        return view('livewire.product-detail-page');
     }
 }
